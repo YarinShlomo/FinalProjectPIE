@@ -1,5 +1,6 @@
 import java.io.*;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.HashSet;
 import java.util.List;
 
@@ -93,6 +94,32 @@ public class MatrixIHandler implements IHandler {
                     objectOutputStream.writeObject(setOfSCCs);
                     break;
                 }
+
+                case "find shortest paths":{
+                    List<List<Index>> allPaths = new ArrayList<>();
+                    //int[][] primitiveMatrix = (int[][])objectInputStream.readObject(); INPUT OF 2dArray
+                    Index source = (Index)objectInputStream.readObject();
+                    Index dest = (Index)objectInputStream.readObject();
+                    if(this.matrix != null){
+                        allPaths.addAll((List<List<Index>>) new BFSvisit().
+                                allPathsToDestanation(this.matrix, source, dest));
+                    }
+                    System.out.println(allPaths);
+                    objectOutputStream.writeObject((allPaths));
+                    break;
+                }
+
+                case "submarines":{
+                    int num = -2;
+                    try{
+                        num = matrix.submarines();
+                    }catch (InterruptedException e){};
+                    if(num == -1) System.out.println("inValid input!");
+                    else System.out.println("there are "+num + " submarines");
+                    objectOutputStream.writeObject(num);
+                    break;
+                }
+
 
                 case "stop":{
                     doWork = false;

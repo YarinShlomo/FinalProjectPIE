@@ -14,9 +14,9 @@ public class Client {
 
         // sending #1 matrix
         int[][] source = {
-                {1, 0, 0},
                 {1, 1, 1},
-                {1, 1, 1}
+                {0, 0, 1},
+                {1, 0, 1}
         };
         //send "matrix" command then write 2d array to socket
         toServer.writeObject("matrix");
@@ -48,6 +48,21 @@ public class Client {
             System.out.println("List of connected components: ");
             setsOfOnes.forEach(t-> System.out.println(t));
         }
+
+        toServer.writeObject("find shortest paths");
+        toServer.writeObject(new Index(0,0));
+        toServer.writeObject(new Index(2, 2));
+        List<List<Index>> allPaths = (List<List<Index>>) fromServer.readObject();
+        if(allPaths.size() == 0){
+            System.out.println("There is no Path.");
+        } else{
+            System.out.println("the paths are:\n" + allPaths);
+        }
+
+        toServer.writeObject("submarines");
+        int numOfSubs = (int)fromServer.readObject();
+        if(numOfSubs == -1) System.out.println("invalid input");
+        else System.out.println("there are "+ numOfSubs +" submarines.");
 
         toServer.writeObject("stop");
 

@@ -1,5 +1,6 @@
 
 import java.util.*;
+import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.stream.Collectors;
 
 public class Matrix {
@@ -146,6 +147,56 @@ public class Matrix {
         ThreadLocalDfsVisit<Index> singleSearch =new ThreadLocalDfsVisit<Index>();
         HashSet<Index> singleSCC = (HashSet<Index>) singleSearch.traverse(myTraversableMat);
         return singleSCC;
+    }
+
+    public int submarines() throws InterruptedException {
+        AtomicBoolean isValid = new AtomicBoolean(true);
+
+        //checking for validation Part1 diagonal close rows left up to down right
+        Thread validation1 = new Thread(()-> {
+            for (int i = 0; i < primitiveMatrix.length - 1; i++)//rows diagonal left-up to he's righter-down index
+            {
+                if(isValid.get() == false) break;
+                for(int j=0; j<primitiveMatrix[0].length-1; j++){
+                    if(primitiveMatrix[i][j] == primitiveMatrix[i+1][j+1] && primitiveMatrix[i][j] == 1){
+                        if(primitiveMatrix[i+1][j] == 0 || primitiveMatrix[i][j+1] == 0)
+                        {
+                            //TODO: create write lock instead of using AtomicBoolean
+                            isValid.set(false);
+                            break;
+                        }
+                    }
+                }
+            }
+        });
+
+        //checking for validation part2 , if there is a 1 without any neighbors.
+        Thread validation2 = new Thread(()->{
+            for(int i=0;i<primitiveMatrix.length;i++){
+                if(isValid.get() == false) break;
+                for(int j=0;j<primitiveMatrix[0].length;j++){
+                    if(this.getNeighbors(new Index(i, j)).size() == 0) {
+                        isValid.set(false);
+                        break;
+                    }
+                }
+            }
+        });
+        validation1.start();
+        validation2.start();
+        validation1.join();
+        validation2.join();
+
+        List<HashSet<Index>> scc = new ArrayList<>();
+        scc.addAll(getAllSCCs());
+        if(isValid.get() == true){
+            return scc.size();
+        }
+        else{//is not valid!
+            return -1;
+        }
+
+
     }
 
 }
