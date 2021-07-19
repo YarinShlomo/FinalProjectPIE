@@ -14,8 +14,8 @@ public class Client {
 
         // sending #1 matrix
         int[][] source = {
-                {1, 1, 1},
-                {0, 0, 1},
+                {1, 0, 1},
+                {1, 0, 0},
                 {1, 0, 1}
         };
         //send "matrix" command then write 2d array to socket
@@ -61,7 +61,7 @@ public class Client {
 
         toServer.writeObject("submarines");
         int numOfSubs = (int)fromServer.readObject();
-        if(numOfSubs == -1) System.out.println("invalid input");
+        if(numOfSubs == -1) System.out.println("Submarines: ~invalid input");
         else System.out.println("there are "+ numOfSubs +" submarines.");
 
         toServer.writeObject("stop");

@@ -170,22 +170,39 @@ public class Matrix {
             }
         });
 
-        //checking for validation part2 , if there is a 1 without any neighbors.
-        Thread validation2 = new Thread(()->{
-            for(int i=0;i<primitiveMatrix.length;i++){
+        //checking for validation Part2 diagonal close rows left down to upper right
+        Thread validation2 = new Thread(()-> {
+            for(int i = 1; i < primitiveMatrix.length -1; i++)
+            {
                 if(isValid.get() == false) break;
-                for(int j=0;j<primitiveMatrix[0].length;j++){
-                    if(this.getNeighbors(new Index(i, j)).size() == 0) {
-                        isValid.set(false);
-                        break;
+                for(int j=0 ; j<primitiveMatrix[0].length - 1;j++)
+                {
+                    if(primitiveMatrix[i][j] == primitiveMatrix[i-1][j+1] && primitiveMatrix[i][j] == 1){
+                        if(primitiveMatrix[i][j+1] ==0 || primitiveMatrix[i-1][j] == 0){
+                            isValid.set(false);
+                            break;
+                        }
                     }
+                }
+            }
+        });
+
+
+        //checking for validation part3 , if there is a 1 without any neighbors.
+        Thread validation3 = new Thread(()->{
+            List<Index> ones = getOnes();
+            for ( Index i : ones){
+                if(getReachable(i).size() == 0){
+                    isValid.set(false);
                 }
             }
         });
         validation1.start();
         validation2.start();
+        validation3.start();
         validation1.join();
         validation2.join();
+        validation3.join();
 
         List<HashSet<Index>> scc = new ArrayList<>();
         scc.addAll(getAllSCCs());

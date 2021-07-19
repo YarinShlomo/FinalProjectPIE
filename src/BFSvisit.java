@@ -9,7 +9,7 @@ public class BFSvisit {
         queue.add(Arrays.asList(source));
         if(!matrix.getSingleSCC(matrix,source).contains(dest)){
             System.out.println("there is no path!");
-            return null;
+            return result;
         }
         while(!queue.isEmpty()){
             List<Index> path = queue.poll();

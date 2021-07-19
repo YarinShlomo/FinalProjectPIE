@@ -104,7 +104,7 @@ public class MatrixIHandler implements IHandler {
                         allPaths.addAll((List<List<Index>>) new BFSvisit().
                                 allPathsToDestanation(this.matrix, source, dest));
                     }
-                    System.out.println(allPaths);
+                    if(allPaths.size() != 0) System.out.println(allPaths);
                     objectOutputStream.writeObject((allPaths));
                     break;
                 }
@@ -114,7 +114,7 @@ public class MatrixIHandler implements IHandler {
                     try{
                         num = matrix.submarines();
                     }catch (InterruptedException e){};
-                    if(num == -1) System.out.println("inValid input!");
+                    if(num == -1) System.out.println("Submarines: inValid input!");
                     else System.out.println("there are "+num + " submarines");
                     objectOutputStream.writeObject(num);
                     break;
