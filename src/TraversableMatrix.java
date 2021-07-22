@@ -1,6 +1,4 @@
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.List;
+import java.util.*;
 import java.util.stream.Collectors;
 
 /**
@@ -40,6 +38,16 @@ public class TraversableMatrix implements Traversable<Index> {
         }
         return reachableIndex;
     }
+    @Override
+    public Collection<Node<Index>> getNeighborNodes(Node<Index> someNode) {
+        List<Node<Index>> neighborIndex = new ArrayList<>();
+        for (Index index : this.matrix.getNeighbors(someNode.getData())) {
+            Node<Index> indexNode = new Node<>(index, someNode);
+            neighborIndex.add(indexNode);
+        }
+        return neighborIndex;
+    }
+
 
     @Override
     public String toString() {

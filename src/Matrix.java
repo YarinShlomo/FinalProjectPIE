@@ -129,8 +129,6 @@ public class Matrix {
         List<Index> listOfOnes = this.getOnes();
         List<HashSet<Index>> multiComponents = new ArrayList<>();
         HashSet<Index> singleSCC;
-
-
         while(!listOfOnes.isEmpty()){
             singleSCC = (HashSet<Index>) getSingleSCC(this,listOfOnes.remove(0));
             multiComponents.add(singleSCC);
@@ -146,6 +144,35 @@ public class Matrix {
         ThreadLocalDfsVisit<Index> singleSearch =new ThreadLocalDfsVisit<Index>();
         HashSet<Index> singleSCC = (HashSet<Index>) singleSearch.traverse(myTraversableMat);
         return singleSCC;
+    }
+
+    public int countSubmarines(){
+        int result =0;
+        List<HashSet<Index>> allSCC = (List<HashSet<Index>>) getAllSCCs();
+        for(HashSet<Index> component : allSCC){
+            result+=isValid(component);
+        }
+        return result;
+    }
+
+    public int isValid(HashSet<Index> scc){
+        if(scc.size()==1){
+            return 0;
+        }
+        //finds the edges of the scc to check if it's a rectangle
+            int rightBound = Collections.max(scc, Comparator.comparingInt(Index::getColumn)).getColumn();
+            int leftBound = Collections.min(scc, Comparator.comparingInt(Index::getColumn)).getColumn();
+            int bottomBound = Collections.max(scc, Comparator.comparingInt(Index::getRow)).getRow();
+            int topBound = Collections.min(scc, Comparator.comparingInt(Index::getRow)).getRow();
+
+        int rectangleSize = (rightBound - leftBound +1)*(bottomBound - topBound +1);
+
+        if(scc.size() == rectangleSize){
+            return 1;
+        }
+        return 0;
+
+
     }
 
 }
