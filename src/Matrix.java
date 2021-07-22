@@ -120,6 +120,10 @@ public class Matrix {
         return list;
     }
 
+    /********************************************/
+    /********* Task #1 **************************/
+    /********************************************/
+
     public ArrayList<Index> getOnes(){
         ArrayList<Index> list = new ArrayList<>();
         this.matrixToList(this.primitiveMatrix).stream().filter(i->getValue(i)==1).map(list::add).collect((Collectors.toList()));
@@ -148,6 +152,10 @@ public class Matrix {
         HashSet<Index> singleSCC = (HashSet<Index>) singleSearch.traverse(myTraversableMat);
         return singleSCC;
     }
+
+    /********************************************/
+    /********* Task #3 **************************/
+    /********************************************/
 
     public int submarines() throws InterruptedException {
         AtomicBoolean isValid = new AtomicBoolean(true);
@@ -214,6 +222,37 @@ public class Matrix {
         }
 
 
+    }
+
+    /********************************************/
+    /********* Task #3 another version, TODO: multithreaded way **************************/
+    /********************************************/
+
+    public int submarinesAnotherVestion(){
+        int result = 0;
+        List<HashSet<Index>> scc = (List<HashSet<Index>>) getAllSCCs();
+        for(HashSet<Index> singleScc : scc){
+            result += isValidSubmarine(singleScc);
+        }
+        return result;
+    }
+
+    private int isValidSubmarine(HashSet<Index> scc){
+        if(scc.size()==2){
+            return 0;
+        }
+
+        int rightBound = Collections.max(scc, Comparator.comparingInt(Index::getColumn)).getColumn();
+        int leftBound = Collections.min(scc, Comparator.comparingInt(Index::getColumn)).getColumn();
+        int topBound = Collections.min(scc, Comparator.comparingInt(Index::getColumn)).getColumn();
+        int bottomBound = Collections.max(scc, Comparator.comparingInt(Index::getColumn)).getColumn();
+
+        int sizeOfScc = (rightBound - leftBound +1 ) * (bottomBound - topBound + 1);
+
+        if(scc.size()==sizeOfScc){
+            return 1;
+        }
+        return 0;
     }
 
 }

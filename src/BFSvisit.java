@@ -1,7 +1,9 @@
 import java.util.*;
 
 public class BFSvisit {
-
+/*
+    Task #2
+ */
     public List<List<Index>> allPathsToDestanation(Matrix matrix, Index source, Index dest){
         List<List<Index>> result = new ArrayList<>();
         Set<Index> finished = new HashSet<>();
