@@ -18,6 +18,12 @@ public class Client {
                 {1, 0, 0},
                 {1, 0, 1}
         };
+
+        int[][] source2 = {
+                {100, 100, 100},
+                {100, 100, 100},
+                {100, 100, 100}
+        };
         //send "matrix" command then write 2d array to socket
         toServer.writeObject("matrix");
         toServer.writeObject(source);
@@ -63,6 +69,18 @@ public class Client {
         int numOfSubs = (int)fromServer.readObject();
         if(numOfSubs == -1) System.out.println("Submarines: ~invalid input");
         else System.out.println("there are "+ numOfSubs +" submarines.");
+
+
+        toServer.writeObject("shortestWeightedPath");
+        toServer.writeObject(source2);
+        toServer.writeObject(new Index(0,0));
+        toServer.writeObject(new Index(2, 1));
+        List<List<Index>> paths = (List<List<Index>>) fromServer.readObject();
+        if(allPaths.size() == 0){
+            System.out.println("There is no Path.");
+        } else{
+            System.out.println("the paths are:\n" + paths);
+        }
 
         toServer.writeObject("stop");
 

@@ -40,6 +40,8 @@ public class TraversableMatrix implements Traversable<Index> {
         return reachableIndex;
     }
 
+
+
     @Override
     public String toString() {
         return matrix.toString();

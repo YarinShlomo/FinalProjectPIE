@@ -88,7 +88,7 @@ public class MatrixIHandler implements IHandler {
                 case "getAllSCC":{
                     List<HashSet<Index>> setOfSCCs = new ArrayList<>();
                     if(this.matrix != null){
-                        setOfSCCs.addAll(this.matrix.getAllSCCs());
+                        setOfSCCs.addAll(this.matrix.getAllSCCs2());
                     }
                     System.out.println("List of SCCs:\n" + setOfSCCs);
                     objectOutputStream.writeObject(setOfSCCs);
@@ -101,7 +101,7 @@ public class MatrixIHandler implements IHandler {
                     Index source = (Index)objectInputStream.readObject();
                     Index dest = (Index)objectInputStream.readObject();
                     if(this.matrix != null){
-                        allPaths.addAll((List<List<Index>>) new BFSvisit().
+                        allPaths.addAll(new BFSvisit().
                                 allPathsToDestanation(this.matrix, source, dest));
                     }
                     if(allPaths.size() != 0) System.out.println(allPaths);
@@ -113,10 +113,24 @@ public class MatrixIHandler implements IHandler {
                     int num = -2;
                     try{
                         num = matrix.submarines();
-                    }catch (InterruptedException e){};
+                    }catch (InterruptedException e){}
                     if(num == -1) System.out.println("Submarines: inValid input!");
                     else System.out.println("there are "+num + " submarines");
                     objectOutputStream.writeObject(num);
+                    break;
+                }
+
+                case "shortestWeightedPath":{
+                    Matrix matrix = new Matrix((int[][])objectInputStream.readObject());
+                    List<List<Index>> paths = new ArrayList<>();
+                    Index source = (Index)objectInputStream.readObject();
+                    Index dest = (Index)objectInputStream.readObject();
+                    if(matrix != null){
+                        paths.addAll(new BellmanFord<>().
+                                allPathsToDestanation(matrix, source, dest));
+                    }
+                    if(paths.size() != 0) System.out.println(paths);
+                    objectOutputStream.writeObject((paths));
                     break;
                 }
 

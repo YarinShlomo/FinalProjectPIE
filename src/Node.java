@@ -1,3 +1,5 @@
+import java.util.HashMap;
+import java.util.Map;
 import java.util.Objects;
 
 /**
@@ -19,6 +21,7 @@ public class Node<T> {
     public Node(T someObject){
         this(someObject,null);
     }
+
 
     public T getData() {
         return data;
@@ -67,5 +70,7 @@ Node<Index> Node<Index> Node<Index>
     public String toString() {
         return data.toString();
     }
+
+
 
 }

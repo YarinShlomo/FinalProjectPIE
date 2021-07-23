@@ -22,7 +22,6 @@ public class BFSvisit {
             } else{
                 finished.add(lastIndex);
                 List<Index> reachableIndices = (List<Index>) matrix.getReachable(lastIndex);
-                //System.out.println(reachableIndices);
                 for(Index neighbor : reachableIndices){
                     if(!finished.contains(neighbor)){
                         List<Index> list = new ArrayList<>(path);
