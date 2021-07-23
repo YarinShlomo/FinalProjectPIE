@@ -3,6 +3,7 @@ import java.util.*;
 public class BellmanFord<T> {
 
     public List<List<Index>> allPathsToDestanation(Matrix matrix, Index source, Index dest){
+        //note by vika
         List<List<Index>> result = new ArrayList<>();
         Set<Index> finished = new HashSet<>();
         Queue<List<Index>> queue = new LinkedList<>();
