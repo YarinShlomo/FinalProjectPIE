@@ -46,7 +46,9 @@ public class Matrix {
         return stringBuilder.toString();
     }
 
-
+    /**
+     Gets a list of neighbours of an index - from left, right, up and down
+     */
     public Collection<Index> getNeighbors(final Index index) {
         Collection<Index> list = new ArrayList<>();
         int extracted = -1;
@@ -72,6 +74,10 @@ public class Matrix {
         }
         return list;
     }
+
+    /**
+     Gets a list of all neighbours of an index - including cross neighbors
+     */
     public Collection<Index> getCrossNeighbors(final Index index){
         Collection<Index> list = new ArrayList<>();
         list = getNeighbors(index);
@@ -135,12 +141,14 @@ public class Matrix {
     /********* Task #1 **************************/
     /********************************************/
 
+    /** Returns a list of indices with value equals to "1" */
     public ArrayList<Index> getOnes() {
         ArrayList<Index> list = new ArrayList<>();
         this.matrixToList(this.primitiveMatrix).stream().filter(i -> getValue(i) == 1).map(list::add).collect((Collectors.toList()));
         return list;
     }
 
+    
     public Collection<? extends HashSet<Index>> getAllSCCs() {
         List<Index> listOfOnes = this.getOnes();
         List<HashSet<Index>> multiComponents = new ArrayList<>();
@@ -156,6 +164,7 @@ public class Matrix {
         return multiComponents.stream().sorted(Comparator.comparing(HashSet::size)).collect(Collectors.toList());
     }
 
+    /** Returns one strongly connected component starts from specific index, using DFS algorithm*/
     public Collection<Index> getSingleSCC(Matrix matrix, Index index) {
         TraversableMatrix myTraversableMat = new TraversableMatrix(matrix);
         myTraversableMat.setStartIndex(index);
@@ -217,7 +226,7 @@ public class Matrix {
 
 
 
-/********************************************/
+    /********************************************/
     /********* Task #1 V3 **************************/
     /********************************************/
 
