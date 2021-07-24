@@ -269,11 +269,10 @@ public class Matrix {
         return result;
     }
 
-    /********************************************/
-    /********* Task #3 **************************/
-    /********************************************/
-
-    public int submarines() throws InterruptedException {
+   /* ******************************************
+    ******** Task #3 *************************
+    *******************************************/
+   /* public int submarines() throws InterruptedException {
         AtomicBoolean isValid = new AtomicBoolean(true);
 
         //checking for validation Part1 diagonal close rows left up to down right
@@ -337,7 +336,7 @@ public class Matrix {
         }
 
 
-    }
+    }*/
 
     /********************************************/
     /********* Task #3 another version***********/
@@ -382,11 +381,6 @@ public class Matrix {
                 Thread part4 = new Thread(() -> {
              bottomBound.set(Collections.max(scc, Comparator.comparingInt(Index::getRow)).getRow());
         });
-
-  /*      int rightBound = Collections.max(scc, Comparator.comparingInt(Index::getColumn)).getColumn();
-        int leftBound = Collections.min(scc, Comparator.comparingInt(Index::getColumn)).getColumn();
-        int topBound = Collections.min(scc, Comparator.comparingInt(Index::getRow)).getRow();
-        int bottomBound = Collections.max(scc, Comparator.comparingInt(Index::getRow)).getRow();*/
 
         part1.start();
         part2.start();
