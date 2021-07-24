@@ -88,7 +88,7 @@ public class MatrixIHandler implements IHandler {
                 case "getAllSCC":{
                     List<HashSet<Index>> setOfSCCs = new ArrayList<>();
                     if(this.matrix != null){
-                        setOfSCCs.addAll(this.matrix.getAllSCCs2());
+                        setOfSCCs.addAll(this.matrix.getAllSCCs());
                     }
                     System.out.println("List of SCCs:\n" + setOfSCCs);
                     objectOutputStream.writeObject(setOfSCCs);
@@ -102,18 +102,27 @@ public class MatrixIHandler implements IHandler {
                     Index dest = (Index)objectInputStream.readObject();
                     if(this.matrix != null){
                         allPaths.addAll(new BFSvisit().
-                                allPathsToDestanation(this.matrix, source, dest));
+                                allPathsToDestination(this.matrix, source, dest));
                     }
                     if(allPaths.size() != 0) System.out.println(allPaths);
                     objectOutputStream.writeObject((allPaths));
                     break;
                 }
 
-                case "submarines":{
+              /*  case "submarines":{
                     int num = -2;
                     try{
                         num = matrix.submarines();
                     }catch (InterruptedException e){}
+                    if(num == -1) System.out.println("Submarines: inValid input!");
+                    else System.out.println("there are "+num + " submarines");
+                    objectOutputStream.writeObject(num);
+                    break;
+                }*/
+
+                case "submarines":{
+                    int num = -2;
+                    num = matrix.submarinesAnotherVestion();
                     if(num == -1) System.out.println("Submarines: inValid input!");
                     else System.out.println("there are "+num + " submarines");
                     objectOutputStream.writeObject(num);
@@ -127,7 +136,7 @@ public class MatrixIHandler implements IHandler {
                     Index dest = (Index)objectInputStream.readObject();
                     if(matrix != null){
                         paths.addAll(new BellmanFord<>().
-                                allPathsToDestanation(matrix, source, dest));
+                                allPathsToDestination(matrix, source, dest));
                     }
                     if(paths.size() != 0) System.out.println(paths);
                     objectOutputStream.writeObject((paths));

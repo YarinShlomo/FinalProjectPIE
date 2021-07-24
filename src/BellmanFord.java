@@ -1,8 +1,19 @@
 import java.util.*;
 
+/********************************************/
+/********* Task #4 in Bellman Ford  , TODO: multithreaded way **************************/
+/********************************************/
+
 public class BellmanFord<T> {
 
-    public List<List<Index>> allPathsToDestanation(Matrix matrix, Index source, Index dest){
+    /**
+     * This function finds all paths from source to destination according to the neighbours (up down left and right) of the indices.
+     * @param matrix type of Matrix
+     * @param source Index
+     * @param dest Index
+     * @return all paths from source to destination
+     */
+    public List<List<Index>> allPathsToDestination(Matrix matrix, Index source, Index dest){
         List<List<Index>> result = new ArrayList<>();
         Set<Index> finished = new HashSet<>();
         Queue<List<Index>> queue = new LinkedList<>();
@@ -15,8 +26,8 @@ public class BellmanFord<T> {
                 result.add(new ArrayList<>(path));
             } else{
                 finished.add(lastIndex);
-                List<Index> reachableIndices = (List<Index>) matrix.getNeighbors(lastIndex);
-                for(Index neighbor : reachableIndices){
+                List<Index> neighborIndices = (List<Index>) matrix.getNeighbors(lastIndex);
+                for(Index neighbor : neighborIndices){
                     if(!finished.contains(neighbor)){
                         List<Index> list = new ArrayList<>(path);
                         list.add(neighbor);
@@ -30,12 +41,19 @@ public class BellmanFord<T> {
         return result;
     }
 
+
+    /**
+     * this function filters all the paths from source to destination, for each destination we sum the values and we choose the minimum sum
+     * then we add all the paths with the minimum sum to filteredResults list which we return.
+     * @param result type of List of Lists of Index
+     * @param matrix type of Matrix
+     * @return filteredResults
+     */
     public List<List<Index>> filterPaths(List<List<Index>> result, Matrix matrix){
         int minSum = 0;
         int localSum = 0 ;
         List<Integer> sums = new ArrayList();
-        /*int minSize = singleFiltered.size();
-        result.removeIf(singleArray -> singleArray.size() > minSize);*/
+
         for(List<Index> i : result){
             for(Index j : i){
                  localSum += matrix.getValue(j);
@@ -61,7 +79,7 @@ public class BellmanFord<T> {
         };
         Matrix matrix = new Matrix(source);
         BellmanFord bfsLogic = new BellmanFord();
-        System.out.println(bfsLogic.allPathsToDestanation(matrix, new Index(0,0), new Index(2,1)));
+        System.out.println(bfsLogic.allPathsToDestination(matrix, new Index(0,0), new Index(2,1)));
 
     }
 

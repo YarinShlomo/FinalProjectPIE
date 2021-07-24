@@ -1,10 +1,19 @@
 import java.util.*;
 
 public class BFSvisit {
-/*
-    Task #2
- */
-    public List<List<Index>> allPathsToDestanation(Matrix matrix, Index source, Index dest){
+    /********************************************/
+    /********* Task #2 **************************/
+    /********************************************/
+
+    /**
+     * This function implements BFS and returns all the paths from source to destination, use finding neighbours/reachebales
+     * with getCrossNeighbors() method
+     * @param matrix type of Matrix
+     * @param source Index
+     * @param dest Index
+     * @return all the paths from source to destination
+     */
+    public List<List<Index>> allPathsToDestination(Matrix matrix, Index source, Index dest){
         List<List<Index>> result = new ArrayList<>();
         Set<Index> finished = new HashSet<>();
         Queue<List<Index>> queue = new LinkedList<>();
@@ -36,6 +45,11 @@ public class BFSvisit {
         return result;
     }
 
+    /**
+     * This function returns the shortest paths in a graph, when we already know that the first path in the list is (one of) the shortest path.
+     * @param result - contains all the paths
+     * @return result - after filtering it contains the shortest paths.
+     */
     public List<List<Index>> filterPaths(List<List<Index>> result){
         List<Index> singleFiltered = result.get(0);
         int minSize = singleFiltered.size();
@@ -51,7 +65,7 @@ public class BFSvisit {
         };
         Matrix matrix = new Matrix(source);
         BFSvisit bfsLogic = new BFSvisit();
-        System.out.println(bfsLogic.allPathsToDestanation(matrix, new Index(0,0),new Index(2,2)));
+        System.out.println(bfsLogic.allPathsToDestination(matrix, new Index(0,0),new Index(2,2)));
     }
 }
 

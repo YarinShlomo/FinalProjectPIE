@@ -2,8 +2,8 @@
 import java.util.*;
 import java.util.concurrent.*;
 import java.util.concurrent.atomic.AtomicBoolean;
+import java.util.concurrent.atomic.AtomicInteger;
 import java.util.stream.Collectors;
-import java.util.stream.Stream;
 
 public class Matrix {
     /**
@@ -340,9 +340,13 @@ public class Matrix {
     }
 
     /********************************************/
-    /********* Task #3 another version, TODO: multithreaded way **************************/
+    /********* Task #3 another version***********/
     /********************************************/
 
+    /**
+     * This function checks the number of submarines that we have, it calls to isValidSubmarine function that checks if the submarines are valid.
+     * @return result which is the number of submarines that we have.
+     */
     public int submarinesAnotherVestion(){
         int result = 0;
         List<HashSet<Index>> scc = (List<HashSet<Index>>) getAllSCCs();
@@ -357,22 +361,55 @@ public class Matrix {
             return 0;
         }
 
-        int rightBound = Collections.max(scc, Comparator.comparingInt(Index::getColumn)).getColumn();
+        AtomicInteger rightBound = new AtomicInteger();
+        AtomicInteger leftBound = new AtomicInteger();
+        AtomicInteger topBound = new AtomicInteger();
+        AtomicInteger bottomBound = new AtomicInteger();
+
+        /**
+         * In this section we check our submarine bounds, the Collcetions.max/min returns the max/min value
+         * in our case the values are the columns/rows of indices, that belong to the collection which in this case is the scc
+         */
+        Thread part1 = new Thread(() -> {
+             rightBound.set(Collections.max(scc, Comparator.comparingInt(Index::getColumn)).getColumn());
+            });
+                Thread part2 = new Thread(() -> {
+             leftBound.set(Collections.min(scc, Comparator.comparingInt(Index::getColumn)).getColumn());
+        });
+                Thread part3 = new Thread(() -> {
+             topBound.set(Collections.min(scc, Comparator.comparingInt(Index::getRow)).getRow());
+        });
+                Thread part4 = new Thread(() -> {
+             bottomBound.set(Collections.max(scc, Comparator.comparingInt(Index::getRow)).getRow());
+        });
+
+  /*      int rightBound = Collections.max(scc, Comparator.comparingInt(Index::getColumn)).getColumn();
         int leftBound = Collections.min(scc, Comparator.comparingInt(Index::getColumn)).getColumn();
         int topBound = Collections.min(scc, Comparator.comparingInt(Index::getRow)).getRow();
-        int bottomBound = Collections.max(scc, Comparator.comparingInt(Index::getRow)).getRow();
+        int bottomBound = Collections.max(scc, Comparator.comparingInt(Index::getRow)).getRow();*/
 
-        int sizeOfScc = (rightBound - leftBound +1 ) * (bottomBound - topBound + 1);
-
-        if(scc.size()==sizeOfScc){
-            return 1;
+        part1.start();
+        part2.start();
+        part3.start();
+        part4.start();
+        try {
+            part1.join();
+            part2.join();
+            part3.join();
+            part4.join();
+            /**
+             * Here we use the calculation of a rectangle's area and we check if the size of the rectangle is the same as the size of the scc
+             * this way we ensure that the submarine is valid (like in a case when we have a square but the middle index's value is 0)
+             */
+            int sizeOfScc = (rightBound.get() - leftBound.get() +1 ) * (bottomBound.get() - topBound.get() + 1);
+            if(scc.size()==sizeOfScc){
+                return 1;
+            }
+        } catch (InterruptedException e) {
+            e.printStackTrace();
         }
         return 0;
     }
-
-    /********************************************/
-    /********* Task #4 in Bellman Ford  , TODO: multithreaded way **************************/
-    /********************************************/
 
 
 
