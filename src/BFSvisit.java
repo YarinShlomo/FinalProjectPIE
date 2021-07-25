@@ -6,7 +6,7 @@ public class BFSvisit {
     /********************************************/
 
     /**
-     * This function implements BFS and returns all the paths from source to destination, use finding neighbours/reachebales
+     * This function implements BFS and returns all the paths from source to destination, use finding neighbours/reachables
      * with getCrossNeighbors() method
      * @param matrix type of Matrix
      * @param source Index

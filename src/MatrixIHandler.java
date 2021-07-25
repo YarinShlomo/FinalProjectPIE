@@ -68,7 +68,7 @@ public class MatrixIHandler implements IHandler {
                     if(this.matrix!=null){
                         reachables.addAll(this.matrix.getReachable(findNeighborsIndex));
                         // print result in server
-                        System.out.println("reachables of " + findNeighborsIndex + ": " + reachables);
+                        System.out.println("reachables from " + findNeighborsIndex + ": " + reachables);
                         // send to socket's OutputStream
                         objectOutputStream.writeObject(reachables);
                     }
@@ -88,7 +88,7 @@ public class MatrixIHandler implements IHandler {
                 case "getAllSCC":{
                     List<HashSet<Index>> setOfSCCs = new ArrayList<>();
                     if(this.matrix != null){
-                        setOfSCCs.addAll(this.matrix.getAllSCCs());
+                        setOfSCCs.addAll(this.matrix.getAllSCCs2());
                     }
                     System.out.println("List of SCCs:\n" + setOfSCCs);
                     objectOutputStream.writeObject(setOfSCCs);
@@ -121,10 +121,8 @@ public class MatrixIHandler implements IHandler {
                 }*/
 
                 case "submarines":{
-                    int num = -2;
-                    num = matrix.submarinesAnotherVestion();
-                    if(num == -1) System.out.println("Submarines: inValid input!");
-                    else System.out.println("there are "+num + " submarines");
+                    int num = matrix.submarinesAnotherVersion();
+                    System.out.println("there are "+num + " submarines");
                     objectOutputStream.writeObject(num);
                     break;
                 }
@@ -134,11 +132,9 @@ public class MatrixIHandler implements IHandler {
                     List<List<Index>> paths = new ArrayList<>();
                     Index source = (Index)objectInputStream.readObject();
                     Index dest = (Index)objectInputStream.readObject();
-                    if(matrix != null){
-                        paths.addAll(new BellmanFord<>().
+                    paths.addAll(new BellmanFord<>().
                                 allPathsToDestination(matrix, source, dest));
-                    }
-                    if(paths.size() != 0) System.out.println(paths);
+                    System.out.println("Lightest paths are: " + paths);
                     objectOutputStream.writeObject((paths));
                     break;
                 }

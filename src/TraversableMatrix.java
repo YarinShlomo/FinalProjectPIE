@@ -31,7 +31,7 @@ public class TraversableMatrix implements Traversable<Index> {
     @Override
     public Collection<Node<Index>> getReachableNodes(Node<Index> someNode) {
         List<Node<Index>> reachableIndex = new ArrayList<>();
-        for (Index index : this.matrix.getNeighbors(someNode.getData())) {
+        for (Index index : this.matrix.getCrossNeighbors(someNode.getData())) {
             if (matrix.getValue(index) == 1) {
                 Node<Index> indexNode = new Node<>(index, someNode);
                 reachableIndex.add(indexNode);

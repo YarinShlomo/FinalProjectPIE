@@ -3,6 +3,7 @@ import java.util.*;
 import java.util.concurrent.*;
 import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.concurrent.atomic.AtomicInteger;
+import java.util.concurrent.locks.ReentrantReadWriteLock;
 import java.util.stream.Collectors;
 
 public class Matrix {
@@ -180,27 +181,26 @@ public class Matrix {
 
     public Collection<? extends HashSet<Index>> getAllSCCs2() {
         List<Index> listOfOnes = this.getOnes();
-        List<Index> syncListOfOnes = Collections.synchronizedList(listOfOnes);
-        List<HashSet<Index>> multiComponents = Collections.synchronizedList(new ArrayList<HashSet<Index>>());
-        List<Index> firstHalfOnes = syncListOfOnes.subList(0, syncListOfOnes.size() / 2);
-        List<Index> secondHalfOnes = syncListOfOnes.subList(syncListOfOnes.size() / 2, syncListOfOnes.size() - 1);
-
+        List<Index> firstHalfOnes = new ArrayList<Index>(listOfOnes.subList(0, listOfOnes.size() / 2));
+        List<Index> secondHalfOnes = new ArrayList<Index>(listOfOnes.subList(listOfOnes.size() / 2, listOfOnes.size()));
+        final List<Index> synFirstHalfOnes = Collections.synchronizedList(firstHalfOnes);
+        final List<Index> synSecondHalfOnes = Collections.synchronizedList(secondHalfOnes);
+        Set<HashSet<Index>> multiComponents = Collections.synchronizedSet(new HashSet<HashSet<Index>>());
         Thread part1 = new Thread(() -> {
-            while (!firstHalfOnes.isEmpty()) {
-                HashSet<Index> singleSCC = (HashSet<Index>) getSingleSCC(this, firstHalfOnes.remove(0));
-                multiComponents.add(singleSCC);
-                firstHalfOnes.removeAll(singleSCC);
-                //  secondHalfOnes.removeAll(singleSCC);
+            while (synFirstHalfOnes.size()!= 0) {
+                HashSet<Index> singleSCC = (HashSet<Index>) getSingleSCC(this, synFirstHalfOnes.remove(0));
+                synSecondHalfOnes.removeAll(singleSCC);
+                synFirstHalfOnes.removeAll(singleSCC);
+                    multiComponents.add(singleSCC);
             }
         });
         Thread part2 = new Thread(() -> {
-            while (secondHalfOnes.size() != 0) {
-                HashSet<Index> singleSCC2 = (HashSet<Index>) getSingleSCC(this, secondHalfOnes.remove(0));
-                multiComponents.add(singleSCC2);
-                secondHalfOnes.removeAll(singleSCC2);
-                //firstHalfOnes.removeAll(singleSCC);
+            while (synSecondHalfOnes.size() != 0) {
+                HashSet<Index> singleSCC2 = (HashSet<Index>) getSingleSCC(this, synSecondHalfOnes.remove(0));
+                synFirstHalfOnes.removeAll(singleSCC2);
+                synSecondHalfOnes.removeAll(singleSCC2);
+                    multiComponents.add(singleSCC2);
             }
-
         });
 
         part1.start();
@@ -212,9 +212,10 @@ public class Matrix {
             e.printStackTrace();
         }
         List<HashSet<Index>> result = new ArrayList<HashSet<Index>>();
+
+        //Adding each SCC for the result array using iterator as it should be with an Collection.Synchronized matter.
         synchronized (multiComponents) {
             Iterator<HashSet<Index>> it = multiComponents.iterator();
-
             while (it.hasNext()) {
                 result.add(it.next());
             }
@@ -346,7 +347,7 @@ public class Matrix {
      * This function checks the number of submarines that we have, it calls to isValidSubmarine function that checks if the submarines are valid.
      * @return result which is the number of submarines that we have.
      */
-    public int submarinesAnotherVestion(){
+    public int submarinesAnotherVersion(){
         int result = 0;
         List<HashSet<Index>> scc = (List<HashSet<Index>>) getAllSCCs();
         for(HashSet<Index> singleScc : scc){
@@ -366,7 +367,7 @@ public class Matrix {
         AtomicInteger bottomBound = new AtomicInteger();
 
         /**
-         * In this section we check our submarine bounds, the Collcetions.max/min returns the max/min value
+         * In this section we check our submarine bounds, the Collections.max/min returns the max/min value
          * in our case the values are the columns/rows of indices, that belong to the collection which in this case is the scc
          */
         Thread part1 = new Thread(() -> {
@@ -391,16 +392,16 @@ public class Matrix {
             part2.join();
             part3.join();
             part4.join();
-            /**
-             * Here we use the calculation of a rectangle's area and we check if the size of the rectangle is the same as the size of the scc
-             * this way we ensure that the submarine is valid (like in a case when we have a square but the middle index's value is 0)
-             */
-            int sizeOfScc = (rightBound.get() - leftBound.get() +1 ) * (bottomBound.get() - topBound.get() + 1);
-            if(scc.size()==sizeOfScc){
-                return 1;
-            }
         } catch (InterruptedException e) {
             e.printStackTrace();
+        }
+        /**
+         * Here we use the calculation of a rectangle's area and we check if the size of the rectangle is the same as the size of the scc
+         * this way we ensure that the submarine is valid (like in a case when we have a square but the middle index's value is 0)
+         */
+        int sizeOfScc = (rightBound.get() - leftBound.get() +1 ) * (bottomBound.get() - topBound.get() + 1);
+        if(scc.size()==sizeOfScc){
+            return 1;
         }
         return 0;
     }

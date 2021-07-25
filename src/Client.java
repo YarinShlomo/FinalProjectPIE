@@ -14,9 +14,9 @@ public class Client {
 
         // sending #1 matrix
         int[][] source = {
-                {1, 0, 1},
-                {1, 0, 1},
-                {1, 0, 0}
+                {1, 0, 1, 1},
+                {1, 0, 0, 0},
+                {0, 1, 1, 0}
         };
 
         int[][] source2 = {
@@ -26,6 +26,7 @@ public class Client {
         };
         //send "matrix" command then write 2d array to socket
         toServer.writeObject("matrix");
+        // sending #1 matrix
         toServer.writeObject(source);
 
         //send "neighbors" command then write an index to socket
@@ -62,25 +63,24 @@ public class Client {
         if(allPaths.size() == 0){
             System.out.println("There is no Path.");
         } else{
-            System.out.println("the paths are:\n" + allPaths);
+            System.out.println("the paths are:");
+            allPaths.forEach(p-> System.out.println(p));
         }
 
         toServer.writeObject("submarines");
         int numOfSubs = (int)fromServer.readObject();
-        if(numOfSubs == -1) System.out.println("Submarines: ~invalid input");
-        else System.out.println("there are "+ numOfSubs +" submarines.");
+        //if(numOfSubs == -1) System.out.println("Submarines: ~invalid input");
+        //else
+            System.out.println("there are "+ numOfSubs +" submarines.");
 
 
         toServer.writeObject("shortestWeightedPath");
         toServer.writeObject(source2);
         toServer.writeObject(new Index(0,0));
         toServer.writeObject(new Index(2, 1));
-        List<List<Index>> paths = (List<List<Index>>) fromServer.readObject();
-        if(allPaths.size() == 0){
-            System.out.println("There is no Path.");
-        } else{
-            System.out.println("the paths are:\n" + paths);
-        }
+        List<List<Index>> lightestPaths = (List<List<Index>>) fromServer.readObject();
+        System.out.println("the lightest paths are:");
+        lightestPaths.forEach(lp-> System.out.println(lp));
 
         toServer.writeObject("stop");
 
