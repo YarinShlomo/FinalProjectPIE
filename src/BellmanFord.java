@@ -52,7 +52,7 @@ public class BellmanFord<T> {
      * @param matrix type of Matrix
      * @return filteredResults
      */
-    public List<List<Index>> filterPaths(List<List<Index>> result, Matrix matrix){
+/*    public List<List<Index>> filterPaths(List<List<Index>> result, Matrix matrix){
         int minSum = 0;
         int localSum = 0 ;
         List<Integer> sums = new ArrayList();
@@ -72,8 +72,15 @@ public class BellmanFord<T> {
             }
         }
         return filteredResults;
-    }
+    }*/
 
+    /**
+     * This function uses multi-threads to achieve maximum effect of calculating values of the lists.
+     * In sumLogic we calculate the minimum sum of each path, then we filter and returns the collection of paths with the minimum weight.
+     * @param result the lists of all paths to destination
+     * @param matrix type of Matrix
+     * @return all light-weight-paths from source to destination
+     */
     public List<List<Index>> filterPathsThreads(List<List<Index>> result, Matrix matrix) {
         List<List<Index>> filteredResults;
         Map<List<Index>,Integer> pathSum = new HashMap<>();
@@ -114,7 +121,7 @@ public class BellmanFord<T> {
     }
 
 
-        public static void main(String[] args) {
+/*        public static void main(String[] args) {
         int[][] source = {
                 {300, 999, 1},
                 {7, 0, 3},
@@ -124,7 +131,7 @@ public class BellmanFord<T> {
         BellmanFord bfsLogic = new BellmanFord();
         System.out.println(bfsLogic.allPathsToDestination(matrix, new Index(0,0), new Index(2,1)));
 
-    }
+    }*/
 
 
 

@@ -111,8 +111,8 @@ public class TcpServer {
                             requestHandler.handle(serverToSpecificClient.getInputStream(),
                                     serverToSpecificClient.getOutputStream());
                             // finished handling client. now close all streams
-                            serverToSpecificClient.getInputStream().close();
-                            serverToSpecificClient.getOutputStream().close();
+                            /*serverToSpecificClient.getInputStream().close();
+                            serverToSpecificClient.getOutputStream().close();*/
                             serverToSpecificClient.close();
                         } catch (IOException ioException) {
                             System.err.println(ioException.getMessage());

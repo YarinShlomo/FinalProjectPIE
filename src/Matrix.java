@@ -150,7 +150,7 @@ public class Matrix {
     }
 
     
-    public Collection<? extends HashSet<Index>> getAllSCCs() {
+    /*public Collection<? extends HashSet<Index>> getAllSCCs() {
         List<Index> listOfOnes = this.getOnes();
         List<HashSet<Index>> multiComponents = new ArrayList<>();
         HashSet<Index> singleSCC;
@@ -163,7 +163,7 @@ public class Matrix {
         }
 
         return multiComponents.stream().sorted(Comparator.comparing(HashSet::size)).collect(Collectors.toList());
-    }
+    }*/
 
     /** Returns one strongly connected component starts from specific index, using DFS algorithm*/
     public Collection<Index> getSingleSCC(Matrix matrix, Index index) {
@@ -175,9 +175,6 @@ public class Matrix {
     }
 
 
-    /********************************************/
-    /********* Task #1 V2 **************************/
-    /********************************************/
 
     public Collection<? extends HashSet<Index>> getAllSCCs2() {
         List<Index> listOfOnes = this.getOnes();
@@ -224,12 +221,13 @@ public class Matrix {
 
     }
 
+/*
+******************************************
 
+******** Task #1 V3 *************************
 
+******************************************
 
-    /********************************************/
-    /********* Task #1 V3 **************************/
-    /********************************************/
 
     public Collection<? extends HashSet<Index>> getAllSCCs3() {
         List<HashSet<Index>> result = new ArrayList<>();
@@ -269,6 +267,7 @@ public class Matrix {
         }
         return result;
     }
+*/
 
    /* ******************************************
     ******** Task #3 *************************
@@ -349,7 +348,7 @@ public class Matrix {
      */
     public int submarinesAnotherVersion(){
         int result = 0;
-        List<HashSet<Index>> scc = (List<HashSet<Index>>) getAllSCCs();
+        List<HashSet<Index>> scc = (List<HashSet<Index>>) getAllSCCs2();
         for(HashSet<Index> singleScc : scc){
             result += isValidSubmarine(singleScc);
         }

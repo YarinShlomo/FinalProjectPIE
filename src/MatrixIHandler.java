@@ -139,7 +139,6 @@ public class MatrixIHandler implements IHandler {
                     break;
                 }
 
-
                 case "stop":{
                     doWork = false;
                     break;

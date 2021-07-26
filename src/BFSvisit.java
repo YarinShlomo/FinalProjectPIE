@@ -57,7 +57,7 @@ public class BFSvisit {
         return result;
     }
 
-    public static void main(String[] args) {
+  /*  public static void main(String[] args) {
         int[][] source = {
                 {1, 1, 1},
                 {1, 0, 1},
@@ -66,7 +66,7 @@ public class BFSvisit {
         Matrix matrix = new Matrix(source);
         BFSvisit bfsLogic = new BFSvisit();
         System.out.println(bfsLogic.allPathsToDestination(matrix, new Index(0,0),new Index(2,2)));
-    }
+    }*/
 }
 
 
