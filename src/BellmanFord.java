@@ -1,4 +1,7 @@
 import java.util.*;
+import java.util.concurrent.*;
+import java.util.concurrent.atomic.AtomicInteger;
+import java.util.stream.Collectors;
 
 /********************************************/
 /********* Task #4 in Bellman Ford  , TODO: multithreaded way **************************/
@@ -37,7 +40,7 @@ public class BellmanFord<T> {
             }
 
         }
-        result = filterPaths(result,matrix);
+        result = filterPathsThreads(result,matrix);
         return result;
     }
 
@@ -71,7 +74,47 @@ public class BellmanFord<T> {
         return filteredResults;
     }
 
-    public static void main(String[] args) {
+    public List<List<Index>> filterPathsThreads(List<List<Index>> result, Matrix matrix) {
+        List<List<Index>> filteredResults = new ArrayList<>();
+        Map<List<Index>,Integer> pathSum = new HashMap<>();
+        final Map<List<Index>,Integer> synPathSum = Collections.synchronizedMap(pathSum);
+        final List<List<Index>> synResult = Collections.synchronizedList(result);
+        AtomicInteger minPathSum = new AtomicInteger(Integer.MAX_VALUE);
+
+        ThreadPoolExecutor threadPool =
+                new ThreadPoolExecutor(2,3,30, TimeUnit.MILLISECONDS,new LinkedBlockingQueue<>());
+
+        Runnable sumLogic = ()->{
+            List<Index> specificPath = synResult.remove(0);
+            AtomicInteger sum= new AtomicInteger(0);
+            for(Index i : specificPath){
+                sum.addAndGet(matrix.getValue(i));
+            }
+
+            if(sum.get() <= minPathSum.get()) {
+                minPathSum.set(sum.get());
+                synPathSum.put(specificPath, sum.get());
+            }
+
+        };
+
+        for(int i=0;i<result.size();i++){
+            threadPool.execute(sumLogic);
+        }
+        threadPool.shutdown();
+        try {
+            threadPool.awaitTermination(Long.MAX_VALUE,TimeUnit.NANOSECONDS);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+
+        filteredResults = pathSum.entrySet().stream().filter(i -> i.getValue() == minPathSum.get()).map(Map.Entry::getKey)
+                .collect(Collectors.toList());
+        return filteredResults;
+    }
+
+
+        public static void main(String[] args) {
         int[][] source = {
                 {300, 999, 1},
                 {7, 0, 3},

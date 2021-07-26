@@ -20,8 +20,8 @@ public class Client {
         };
 
         int[][] source2 = {
-                {100, 700, 600},
-                {-100, 100,-50},
+                {100, 200, -600},
+                {-500, 1000,-50},
                 {-50, 100, 100}
         };
         //send "matrix" command then write 2d array to socket
