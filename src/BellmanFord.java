@@ -75,7 +75,7 @@ public class BellmanFord<T> {
     }
 
     public List<List<Index>> filterPathsThreads(List<List<Index>> result, Matrix matrix) {
-        List<List<Index>> filteredResults = new ArrayList<>();
+        List<List<Index>> filteredResults;
         Map<List<Index>,Integer> pathSum = new HashMap<>();
         final Map<List<Index>,Integer> synPathSum = Collections.synchronizedMap(pathSum);
         final List<List<Index>> synResult = Collections.synchronizedList(result);
