@@ -15,7 +15,7 @@ public class BellmanFord<T> {
      */
     public List<List<Index>> allPathsToDestination(Matrix matrix, Index source, Index dest){
         List<List<Index>> result = new ArrayList<>();
-        Set<Index> finished = new HashSet<>();
+        //Set<Index> finished = new HashSet<>();
         Queue<List<Index>> queue = new LinkedList<>();
         queue.add(Arrays.asList(source));
         while(!queue.isEmpty()){
@@ -25,10 +25,10 @@ public class BellmanFord<T> {
             if(lastIndex.equals(dest)){
                 result.add(new ArrayList<>(path));
             } else{
-                finished.add(lastIndex);
+               // finished.add(lastIndex);
                 List<Index> neighborIndices = (List<Index>) matrix.getNeighbors(lastIndex);
                 for(Index neighbor : neighborIndices){
-                    if(!finished.contains(neighbor)){
+                    if(!path.contains(neighbor)){
                         List<Index> list = new ArrayList<>(path);
                         list.add(neighbor);
                         queue.add(list);

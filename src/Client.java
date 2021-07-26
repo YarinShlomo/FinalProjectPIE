@@ -20,9 +20,9 @@ public class Client {
         };
 
         int[][] source2 = {
-                {100, 100, 100},
-                {100, 100, 100},
-                {100, 100, 100}
+                {100, 700, 600},
+                {-100, 100,-50},
+                {-50, 100, 100}
         };
         //send "matrix" command then write 2d array to socket
         toServer.writeObject("matrix");
@@ -77,7 +77,7 @@ public class Client {
         toServer.writeObject("shortestWeightedPath");
         toServer.writeObject(source2);
         toServer.writeObject(new Index(0,0));
-        toServer.writeObject(new Index(2, 1));
+        toServer.writeObject(new Index(2,2));
         List<List<Index>> lightestPaths = (List<List<Index>>) fromServer.readObject();
         System.out.println("the lightest paths are:");
         lightestPaths.forEach(lp-> System.out.println(lp));
